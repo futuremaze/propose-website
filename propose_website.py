@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import socket
+from xml.dom.minidom import parse, parseString
 # import xml.etree.ElementTree as ET
 
 
@@ -9,13 +10,13 @@ def main():
     port = 10500
 
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(host, port)
+    client.connect((host, port))
 
     try:
         data = ''
         while True:
             if '</RECOGOUT>\n.' in data:
-                print data
+                print(data)
                 data = ''
                 # root = ET.fromstring(
                 #     '<?xml version="1.0"?>\n' + data[data.find(
@@ -27,10 +28,10 @@ def main():
                 #     if command == u'おはよう' and score >= 0.9:
                 #         # ここにおはよう処理
                 #
-                # data = ''
+                data = ''
 
             else:
-                data = data + client.recv(1024)
+                data = data + client.recv(1024).decode('utf-8')
     except KeyboardInterrupt:
         client.close()
 
